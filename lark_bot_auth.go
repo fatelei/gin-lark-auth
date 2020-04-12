@@ -14,28 +14,23 @@ func VerifyLarkBot(token string) gin.HandlerFunc {
 			return
 		}
 
-		if v, ok := data["token"]; ok {
-			if v != token {
-				c.JSON(200, gin.H{})
-				c.Abort()
-				return
-			} else {
-				if msgType, ok := data["type"]; ok {
-					if msgType == "url_verification" {
+		if msgType, ok := data["type"]; ok {
+			if msgType == "url_verification" {
+				if receivedToken, ok := data["token"]; ok {
+					if receivedToken != token {
+						c.JSON(200, gin.H{})
+						c.Abort()
+						return
+					} else {
 						if challenge, ok := data["challenge"]; ok {
 							c.JSON(http.StatusOK, gin.H{"challenge": challenge})
 							c.Abort()
 							return
 						}
-					} else {
-						c.Next()
 					}
 				}
 			}
-		} else {
-			c.JSON(http.StatusOK, gin.H{})
-			c.Abort()
-			return
 		}
+		c.Next()
 	}
 }
