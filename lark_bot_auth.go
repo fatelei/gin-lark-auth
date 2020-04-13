@@ -9,7 +9,7 @@ import (
 func VerifyLarkBot(token string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		data := make(map[string]interface{})
-		if err := c.ShouldBindWith(&data, binding.JSON); err != nil {
+		if err := c.ShouldBindBodyWith(&data, binding.JSON); err != nil {
 			c.JSON(http.StatusOK, gin.H{})
 			c.Abort()
 			return
