@@ -2,13 +2,14 @@ package gin_lark_auth
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"net/http"
 )
 
 func VerifyLarkBot(token string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		data := make(map[string]interface{})
-		if err := c.ShouldBindJSON(&data); err != nil {
+		if err := c.ShouldBindWith(&data, binding.JSON); err != nil {
 			c.JSON(http.StatusOK, gin.H{})
 			c.Abort()
 			return
